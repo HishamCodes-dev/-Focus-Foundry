@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Focus Foundry | Productivity Redefined</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Cairo:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body class="dark-theme">
+    <div id="loading-screen" class="loading-screen">
+      <div class="loading-spinner">
+        <i class="fas fa-brain"></i>
+      </div>
+      <p data-i18n="loading">Initializing Focus Mode...</p>
+    </div>
+
+    <div class="top-controls">
+      <button
+        id="lang-toggle"
+        class="control-btn icon-only"
+        aria-label="Toggle Language"
+      >
+        <i class="fas fa-language"></i>
+      </button>
+      <button
+        id="theme-toggle"
+        class="control-btn icon-only"
+        aria-label="Toggle Theme"
+      >
+        <i class="fas fa-moon"></i>
+      </button>
+    </div>
+
+    <div class="app-container">
+      <header class="header">
+        <div class="header-content">
+          <div class="logo">
+            <i class="fas fa-brain"></i>
+            <h1 data-i18n="logoTitle">Focus Foundry</h1>
+          </div>
+          <div class="header-stats">
+            <div class="stat-item">
+              <span id="totalStudyTime">00:00:00</span>
+              <small data-i18n="totalStudyTime">Total Study Time</small>
+            </div>
+            <div class="stat-item">
+              <span id="sessionsCompleted">0</span>
+              <small data-i18n="sessionsDone">Sessions Done</small>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="motivation-section">
+        <blockquote id="dailyQuote">
+          "The secret of getting ahead is getting started." – Mark Twain
+        </blockquote>
+        <button id="newQuoteBtn" class="btn-secondary btn-sm">
+          <i class="fas fa-sync-alt"></i>
+          <span data-i18n="newQuote">New Quote</span>
+        </button>
+      </div>
+
+      <main class="dashboard-grid">
+        <div class="card pomodoro-card">
+          <div class="card-header">
+            <i class="fas fa-clock"></i>
+            <h2 data-i18n="pomodoroTitle">Pomodoro Timer</h2>
+          </div>
+          <div class="timer-wrapper">
+            <div class="time-circle">
+              <svg class="progress-ring" width="240" height="240">
+                <circle
+                  class="progress-ring__bg"
+                  stroke-width="8"
+                  fill="transparent"
+                  r="110"
+                  cx="120"
+                  cy="120"
+                />
+                <circle
+                  class="progress-ring__circle"
+                  stroke-width="8"
+                  fill="transparent"
+                  r="110"
+                  cx="120"
+                  cy="120"
+                />
+              </svg>
+              <div class="time-display" dir="ltr">
+                <span id="timerMinutes">25</span>:<span id="timerSeconds"
+                  >00</span
+                >
+              </div>
+            </div>
+          </div>
+          <div class="timer-controls">
+            <button id="startBtn" class="btn-primary btn-large">
+              <i class="fas fa-play"></i>
+              <span data-i18n="startFocus">Start Focus</span>
+            </button>
+            <button
+              id="pauseBtn"
+              class="btn-secondary btn-large"
+              style="display: none"
+            >
+              <i class="fas fa-pause"></i> <span data-i18n="pause">Pause</span>
+            </button>
+            <button id="resetBtn" class="btn-outline btn-large">
+              <i class="fas fa-redo"></i> <span data-i18n="reset">Reset</span>
+            </button>
+            <button
+              id="stopAlarmBtn"
+              class="btn-danger btn-large"
+              style="display: none"
+            >
+              <i class="fas fa-bell-slash"></i>
+              <span data-i18n="stopAlarm">Stop Alarm</span>
+            </button>
+          </div>
+          <div class="session-info">
+            <span id="sessionCounter">Session 1/4</span>
+            <span id="timerMode" class="badge" data-i18n="focusMode"
+              >Focus</span
+            >
+          </div>
+        </div>
+
+        <div class="card stats-card">
+          <div class="card-header">
+            <i class="fas fa-chart-line"></i>
+            <h2 data-i18n="progressTitle">Today's Progress</h2>
+          </div>
+          <div class="progress-bars">
+            <div class="progress-item">
+              <div class="progress-label">
+                <span data-i18n="tasksCompleted">Tasks Completed</span>
+                <span id="tasksCompleted">0/0</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card todo-card">
+          <div class="card-header">
+            <div class="header-title-group">
+              <i class="fas fa-tasks"></i>
+              <h2 data-i18n="tasksTitle">Quick Tasks</h2>
+            </div>
+            <select id="taskFilter" class="form-select select-sm">
+              <option value="all" data-i18n="allTasks">All Tasks</option>
+              <option value="pending" data-i18n="pending">Pending</option>
+              <option value="completed" data-i18n="completed">Completed</option>
+            </select>
+          </div>
+          <div class="todo-input">
+            <input
+              type="text"
+              id="newTaskInput"
+              placeholder="Add new task..."
+              data-i18n-placeholder="addTaskPlaceholder"
+            />
+            <button id="addTaskBtn" class="btn-primary icon-only">
+              <i class="fas fa-plus"></i>
+            </button>
+          </div>
+          <div id="todoList" class="todo-list"></div>
+        </div>
+
+        <div class="card planner-card">
+          <div class="card-header">
+            <i class="fas fa-graduation-cap"></i>
+            <h2 data-i18n="plannerTitle">My Subjects</h2>
+          </div>
+          <div class="todo-input">
+            <input
+              type="text"
+              id="newCourseInput"
+              placeholder="Add new course..."
+              data-i18n-placeholder="addCoursePlaceholder"
+            />
+            <button id="addCourseBtn" class="btn-primary icon-only">
+              <i class="fas fa-plus"></i>
+            </button>
+          </div>
+          <div id="courseList" class="todo-list"></div>
+        </div>
+
+        <div class="card quiz-card">
+          <div class="card-header">
+            <i class="fas fa-question-circle"></i>
+            <h2 data-i18n="quizTitle">Quick Quiz</h2>
+          </div>
+
+          <div class="quiz-manager-form">
+            <select id="quizSubjectSelect" class="form-select mb-1">
+              <option value="" data-i18n="selectSubject">Select Subject</option>
+            </select>
+            <input type="hidden" id="editingQuestionIndex" value="-1" />
+            <input
+              type="text"
+              id="quizQuestionInput"
+              class="mb-1"
+              placeholder="Enter Question"
+              data-i18n-placeholder="questionPlaceholder"
+            />
+
+            <div class="quiz-options-inputs mb-1">
+              <input
+                type="text"
+                class="opt-in"
+                placeholder="Option 1"
+                data-i18n-placeholder="opt1"
+              />
+              <input
+                type="text"
+                class="opt-in"
+                placeholder="Option 2"
+                data-i18n-placeholder="opt2"
+              />
+              <input
+                type="text"
+                class="opt-in"
+                placeholder="Option 3"
+                data-i18n-placeholder="opt3"
+              />
+              <input
+                type="text"
+                class="opt-in"
+                placeholder="Option 4"
+                data-i18n-placeholder="opt4"
+              />
+            </div>
+
+            <select id="quizCorrectAnswer" class="form-select mb-1">
+              <option value="0" data-i18n="correctOpt1">
+                Option 1 is Correct
+              </option>
+              <option value="1" data-i18n="correctOpt2">
+                Option 2 is Correct
+              </option>
+              <option value="2" data-i18n="correctOpt3">
+                Option 3 is Correct
+              </option>
+              <option value="3" data-i18n="correctOpt4">
+                Option 4 is Correct
+              </option>
+            </select>
+            <button id="addQuizQuestionBtn" class="btn-primary full-width">
+              <i class="fas fa-plus"></i>
+              <span id="quizSubmitBtnText" data-i18n="addQuestion"
+                >Add Question</span
+              >
+            </button>
+          </div>
+
+          <hr class="divider" />
+          <div id="quizSectionsContainer" class="quiz-grid"></div>
+
+          <div id="manageQuestionsArea" style="display: none">
+            <div class="manage-header">
+              <h3 id="manageSubjectTitle">Subject Questions</h3>
+              <button
+                onclick="focusFoundry.exitManagement()"
+                class="btn-outline btn-sm"
+              >
+                Back
+              </button>
+            </div>
+            <div id="questionsListContainer" class="todo-list"></div>
+          </div>
+
+          <div class="quiz-content" id="activeQuizArea" style="display: none">
+            <div id="quizQuestion" class="quiz-question"></div>
+            <div id="quizOptions" class="quiz-options"></div>
+            <div
+              id="quizResult"
+              class="quiz-result"
+              style="display: none"
+            ></div>
+          </div>
+
+          <div class="quiz-controls" id="quizControls" style="display: none">
+            <button id="exitQuizBtn" class="btn-outline">Exit Quiz</button>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <div id="notification" class="notification"></div>
+
+    <audio
+      id="focusAlarm"
+      src="https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg"
+      loop
+      preload="auto"
+    ></audio>
+    <audio
+      id="breakAlarm"
+      src="https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg"
+      loop
+      preload="auto"
+    ></audio>
+
+    <script src="script.js"></script>
+  </body>
+</html>
